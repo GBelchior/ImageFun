@@ -25,6 +25,11 @@ namespace ImageFun
         private int FBoundingRectangleWidth;
         private int FBoundingRectangleHeight;
 
+        private DateTime FStartProcess;
+        private DateTime FEndProcess;
+
+        public TimeSpan TimeElapsed { get => FEndProcess - FStartProcess; }
+
         public Bitmap OriginalBitmap { get; }
         public Bitmap NewBitmap { get => (Bitmap)FBitmap1.Clone(); }
 
@@ -49,6 +54,8 @@ namespace ImageFun
 
         public void Start()
         {
+            FStartProcess = DateTime.Now;
+
             FBitmapProcessor = Task.Factory.StartNew(() =>
             {
                 Initialize();
@@ -64,13 +71,17 @@ namespace ImageFun
                         ProgressChanged?.Invoke(this, new ProgressChangedEventArgs(FIterationsDone + 1, FTotalIterations));
                     }
 
+                    FEndProcess = DateTime.Now;
                     Done?.Invoke(this, new EventArgs());
                 }
                 catch (OperationCanceledException)
                 {
+                    FEndProcess = DateTime.Now;
                     Done?.Invoke(this, new EventArgs());
                     return;
                 }
+
+                FEndProcess = DateTime.Now;
             }, FCancellationToken);
         }
 

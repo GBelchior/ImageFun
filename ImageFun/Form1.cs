@@ -49,7 +49,6 @@ namespace ImageFun
                     prgIterations.Value = 0;
 
                     prgIterations.Visible = true;
-                    lblIterations.Visible = true;
 
                     FImageWorker.Start();
 
@@ -66,7 +65,6 @@ namespace ImageFun
                     btnSearchImage.Enabled = true;
 
                     prgIterations.Visible = false;
-                    lblIterations.Visible = false;
 
                     chkFast.Enabled = true;
                     chkFaster.Enabled = true;
@@ -83,6 +81,7 @@ namespace ImageFun
             Invoke(new Action(() =>
             {
                 picCreated.BackgroundImage = FImageWorker.NewBitmap;
+                lblIterations.Text = $"Took {FImageWorker.TimeElapsed:hh\\:mm\\:ss\\.fff}";
                 Operating = false;
             }));
         }

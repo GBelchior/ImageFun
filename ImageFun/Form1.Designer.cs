@@ -32,6 +32,12 @@
             this.tblMain = new System.Windows.Forms.TableLayoutPanel();
             this.picCreated = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.chkFaster = new System.Windows.Forms.CheckBox();
+            this.chkFast = new System.Windows.Forms.CheckBox();
+            this.nudEllipseY = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
+            this.nudEllipseX = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
             this.lblIterations = new System.Windows.Forms.Label();
             this.prgIterations = new System.Windows.Forms.ProgressBar();
             this.label2 = new System.Windows.Forms.Label();
@@ -41,19 +47,13 @@
             this.txtFile = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.label3 = new System.Windows.Forms.Label();
-            this.nudEllipseX = new System.Windows.Forms.NumericUpDown();
-            this.nudEllipseY = new System.Windows.Forms.NumericUpDown();
-            this.label4 = new System.Windows.Forms.Label();
-            this.chkFast = new System.Windows.Forms.CheckBox();
-            this.chkFaster = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picOriginal)).BeginInit();
             this.tblMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCreated)).BeginInit();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudIterations)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEllipseX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEllipseY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEllipseX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudIterations)).BeginInit();
             this.SuspendLayout();
             // 
             // picOriginal
@@ -119,16 +119,98 @@
             this.panel1.Size = new System.Drawing.Size(782, 66);
             this.panel1.TabIndex = 2;
             // 
+            // chkFaster
+            // 
+            this.chkFaster.AutoSize = true;
+            this.chkFaster.Location = new System.Drawing.Point(527, 10);
+            this.chkFaster.Name = "chkFaster";
+            this.chkFaster.Size = new System.Drawing.Size(55, 17);
+            this.chkFaster.TabIndex = 13;
+            this.chkFaster.Text = "Faster";
+            this.chkFaster.UseVisualStyleBackColor = true;
+            // 
+            // chkFast
+            // 
+            this.chkFast.AutoSize = true;
+            this.chkFast.Location = new System.Drawing.Point(475, 10);
+            this.chkFast.Name = "chkFast";
+            this.chkFast.Size = new System.Drawing.Size(46, 17);
+            this.chkFast.TabIndex = 12;
+            this.chkFast.Text = "Fast";
+            this.chkFast.UseVisualStyleBackColor = true;
+            // 
+            // nudEllipseY
+            // 
+            this.nudEllipseY.Location = new System.Drawing.Point(179, 36);
+            this.nudEllipseY.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudEllipseY.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudEllipseY.Name = "nudEllipseY";
+            this.nudEllipseY.Size = new System.Drawing.Size(49, 20);
+            this.nudEllipseY.TabIndex = 11;
+            this.nudEllipseY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudEllipseY.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(123, 38);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(50, 13);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Ellipse Y:";
+            // 
+            // nudEllipseX
+            // 
+            this.nudEllipseX.Location = new System.Drawing.Point(68, 36);
+            this.nudEllipseX.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudEllipseX.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudEllipseX.Name = "nudEllipseX";
+            this.nudEllipseX.Size = new System.Drawing.Size(49, 20);
+            this.nudEllipseX.TabIndex = 9;
+            this.nudEllipseX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudEllipseX.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 38);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(50, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Ellipse X:";
+            // 
             // lblIterations
             // 
             this.lblIterations.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblIterations.AutoSize = true;
             this.lblIterations.Location = new System.Drawing.Point(551, 38);
             this.lblIterations.Name = "lblIterations";
-            this.lblIterations.Size = new System.Drawing.Size(138, 13);
+            this.lblIterations.Size = new System.Drawing.Size(0, 13);
             this.lblIterations.TabIndex = 7;
-            this.lblIterations.Text = "1000000000 / 1000000000";
-            this.lblIterations.Visible = false;
             // 
             // prgIterations
             // 
@@ -208,90 +290,6 @@
             // 
             this.openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 38);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(50, 13);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Ellipse X:";
-            // 
-            // nudEllipseX
-            // 
-            this.nudEllipseX.Location = new System.Drawing.Point(68, 36);
-            this.nudEllipseX.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudEllipseX.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudEllipseX.Name = "nudEllipseX";
-            this.nudEllipseX.Size = new System.Drawing.Size(49, 20);
-            this.nudEllipseX.TabIndex = 9;
-            this.nudEllipseX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.nudEllipseX.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // nudEllipseY
-            // 
-            this.nudEllipseY.Location = new System.Drawing.Point(179, 36);
-            this.nudEllipseY.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudEllipseY.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudEllipseY.Name = "nudEllipseY";
-            this.nudEllipseY.Size = new System.Drawing.Size(49, 20);
-            this.nudEllipseY.TabIndex = 11;
-            this.nudEllipseY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.nudEllipseY.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(123, 38);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(50, 13);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "Ellipse Y:";
-            // 
-            // chkFast
-            // 
-            this.chkFast.AutoSize = true;
-            this.chkFast.Location = new System.Drawing.Point(475, 10);
-            this.chkFast.Name = "chkFast";
-            this.chkFast.Size = new System.Drawing.Size(46, 17);
-            this.chkFast.TabIndex = 12;
-            this.chkFast.Text = "Fast";
-            this.chkFast.UseVisualStyleBackColor = true;
-            // 
-            // chkFaster
-            // 
-            this.chkFaster.AutoSize = true;
-            this.chkFaster.Location = new System.Drawing.Point(527, 10);
-            this.chkFaster.Name = "chkFaster";
-            this.chkFaster.Size = new System.Drawing.Size(55, 17);
-            this.chkFaster.TabIndex = 13;
-            this.chkFaster.Text = "Faster";
-            this.chkFaster.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -306,9 +304,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.picCreated)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudIterations)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEllipseX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEllipseY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEllipseX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudIterations)).EndInit();
             this.ResumeLayout(false);
 
         }
