@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -140,8 +141,9 @@ namespace ImageFun
 
         private void CompareImages(int AX, int AY, int AWidth, int AHeight)
         {
-            int points1 = 0;
-            int points2 = 0;
+            double sumEuclideanDist1 = 0;
+            double sumEuclideanDist2 = 0;
+            int numPixels = AWidth * AHeight;
 
             for (int x = 0; x < AWidth; x++)
             {
@@ -156,51 +158,39 @@ namespace ImageFun
                     Color c2 = FBitmap2.GetPixel(AX + x, AY + y);
                     Color cOrig = OriginalBitmap.GetPixel(AX + x, AY + y);
 
-                    float hue1 = c1.GetHue();
-                    float sat1 = c1.GetSaturation();
-                    float bri1 = c1.GetBrightness();
+                    double redsqr1 = Math.Pow(c1.R - cOrig.R, 2);
+                    double gresqr1 = Math.Pow(c1.G - cOrig.G, 2);
+                    double blusqr1 = Math.Pow(c1.B - cOrig.B, 2);
 
-                    float hue2 = c2.GetHue();
-                    float sat2 = c2.GetSaturation();
-                    float bri2 = c2.GetBrightness();
-
-                    float hueorig = cOrig.GetHue();
-                    float satorig = cOrig.GetSaturation();
-                    float briorig = cOrig.GetBrightness();
-
-                    double huesqr1 = Math.Pow(hue1 - hueorig, 2);
-                    double satsqr1 = Math.Pow(sat1 - satorig, 2);
-                    double brisqr1 = Math.Pow(bri1 - briorig, 2);
-
-                    double huesqr2 = Math.Pow(hue2 - hueorig, 2);
-                    double satsqr2 = Math.Pow(sat2 - satorig, 2);
-                    double brisqr2 = Math.Pow(bri2 - briorig, 2);
+                    double redsqr2 = Math.Pow(c2.R - cOrig.R, 2);
+                    double gresqr2 = Math.Pow(c2.G - cOrig.G, 2);
+                    double blusqr2 = Math.Pow(c2.B - cOrig.B, 2);
 
                     // Calculo a distância euclidiana entre a cor da imagem 1 e da imagem original
-                    double euclideanDistance1 = Math.Sqrt(huesqr1 + satsqr1 + brisqr1);
+                    sumEuclideanDist1 += Math.Sqrt(redsqr1 + gresqr1 + blusqr1);
 
                     // Calculo a distância euclidiana entre a cor da imagem 2 e da imagem original
-                    double euclideanDistance2 = Math.Sqrt(huesqr2 + satsqr2 + brisqr2);
-
-                    // Se a distância das cores da imagem 1 for menor do que a da imagem 2,
-                    // quer dizer que a imagem 1 tem uma cor mais similar a da original
-                    if (euclideanDistance1 < euclideanDistance2) points1++;
-                    else if (euclideanDistance2 < euclideanDistance1) points2++;
+                    sumEuclideanDist2 += Math.Sqrt(redsqr2 + gresqr2 + blusqr2);
                 }
             }
+
+            // Faço a média das distâncias
+            sumEuclideanDist1 /= numPixels;
+            sumEuclideanDist2 /= numPixels;
 
             Rectangle r = new Rectangle(AX, AY, AWidth, AHeight);
 
             // Se a imagem 1 é mais parecida com a original, eu copio a imagem 1 para a imagem 2
-            if (points1 > points2)
+            if (sumEuclideanDist1 < sumEuclideanDist2)
             {
                 using (Graphics g = Graphics.FromImage(FBitmap2))
                 {
+                    //TODO: Desenhar apenas no conjunto de pontos dentro da elipse
                     g.DrawImage(FBitmap1, r, r, GraphicsUnit.Pixel);
                 }
             }
             // Senão, copio a imagem 2 para a imagem 1
-            else if (points2 > points1)
+            else
             {
                 using (Graphics g = Graphics.FromImage(FBitmap1))
                 {
