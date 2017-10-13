@@ -68,6 +68,7 @@ namespace ImageFun
                 }
                 catch (OperationCanceledException)
                 {
+                    Done?.Invoke(this, new EventArgs());
                     return;
                 }
             }, FCancellationToken);
