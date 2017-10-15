@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
+using System.Drawing.Imaging;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,8 +16,8 @@ namespace ImageFun
         private CancellationToken FCancellationToken;
 
         private List<Color> FImageColors;
-        private Bitmap FBitmap1;
-        private Bitmap FBitmap2;
+        private DirectBitmap FBitmap1;
+        private DirectBitmap FBitmap2;
         private int FIterationsDone;
         private int FTotalIterations;
         private Random FRandomSource;
@@ -31,8 +30,8 @@ namespace ImageFun
 
         public TimeSpan TimeElapsed { get => FEndProcess - FStartProcess; }
 
-        public Bitmap OriginalBitmap { get; }
-        public Bitmap NewBitmap { get => (Bitmap)FBitmap1.Clone(); }
+        public DirectBitmap OriginalBitmap { get; }
+        public Bitmap NewBitmap { get => (Bitmap)FBitmap1.Bitmap.Clone(); }
 
         public event ProgressChangedEventHandler ProgressChanged;
         public event EventHandler Done;
@@ -44,7 +43,12 @@ namespace ImageFun
             FImageColors = new List<Color>();
             FRandomSource = new Random();
 
-            OriginalBitmap = new Bitmap(AOriginalBitmap);
+            OriginalBitmap = new DirectBitmap(AOriginalBitmap.Width, AOriginalBitmap.Height);
+
+            using (Graphics g = Graphics.FromImage(OriginalBitmap.Bitmap))
+            {
+                g.DrawImage(AOriginalBitmap, 0, 0);
+            }
 
             FIterationsDone = 0;
             FTotalIterations = ANumberOfIterations;
@@ -67,7 +71,7 @@ namespace ImageFun
                     {
                         FCancellationToken.ThrowIfCancellationRequested();
 
-                        DrawRandomCircle();
+                        DrawRandomEllipse();
 
                         ProgressChanged?.Invoke(this, new ProgressChangedEventArgs(FIterationsDone + 1, FTotalIterations));
                     }
@@ -103,28 +107,33 @@ namespace ImageFun
             }
 
             // Inicializo minhas 2 imagens temporárias
-            FBitmap1 = new Bitmap(OriginalBitmap.Width, OriginalBitmap.Height, OriginalBitmap.PixelFormat);
-            FBitmap2 = new Bitmap(OriginalBitmap.Width, OriginalBitmap.Height, OriginalBitmap.PixelFormat);
+            FBitmap1 = new DirectBitmap(OriginalBitmap.Width, OriginalBitmap.Height);
+            FBitmap2 = new DirectBitmap(OriginalBitmap.Width, OriginalBitmap.Height);
 
             // Preencho as 2 imagens temporárias de branco
-            using (Graphics g1 = Graphics.FromImage(FBitmap1))
-            using (Graphics g2 = Graphics.FromImage(FBitmap2))
+            using (Graphics g1 = Graphics.FromImage(FBitmap1.Bitmap))
+            using (Graphics g2 = Graphics.FromImage(FBitmap2.Bitmap))
             {
                 g1.FillRectangle(Brushes.White, 0, 0, OriginalBitmap.Width, OriginalBitmap.Height);
                 g2.FillRectangle(Brushes.White, 0, 0, OriginalBitmap.Width, OriginalBitmap.Height);
             }
+
+            Rectangle imageRect = new Rectangle(0, 0, OriginalBitmap.Width, OriginalBitmap.Height);
         }
-        private void DrawRandomCircle()
+        private void DrawRandomEllipse()
         {
             // Pego posições x e y aleatórias para desenhar na imagem
-            int x = FRandomSource.Next(0, OriginalBitmap.Width);
-            int y = FRandomSource.Next(0, OriginalBitmap.Height);
+            int x = FRandomSource.Next(0, OriginalBitmap.Width - 1);
+            int y = FRandomSource.Next(0, OriginalBitmap.Height - 1);
+
+            int x2 = x + 80 >= OriginalBitmap.Width ? OriginalBitmap.Width - 1 : x + 80;
+            int y2 = y - 40 < 0 ? 0 : y - 40;
 
             // Pego uma cor aleatória da imagem
             Color color = FImageColors[FRandomSource.Next(0, FImageColors.Count)];
 
             // Desenho uma elipse na imagem
-            using (Graphics g = Graphics.FromImage(FBitmap1))
+            using (Graphics g = Graphics.FromImage(FBitmap1.Bitmap))
             using (SolidBrush b = new SolidBrush(color))
             {
                 g.FillEllipse(b, x, y, FBoundingRectangleWidth, FBoundingRectangleHeight);
@@ -145,13 +154,14 @@ namespace ImageFun
             double sumEuclideanDist2 = 0;
             int numPixels = AWidth * AHeight;
 
+            if (AX < 0) AX = 0;
+            if (AY < 0) AY = 0;
+
             for (int x = 0; x < AWidth; x++)
             {
                 for (int y = 0; y < AHeight; y++)
                 {
-                    if (AX + x < 0 ||
-                        AX + x >= FBitmap1.Width ||
-                        AY + y < 0 ||
+                    if (AX + x >= FBitmap1.Width ||
                         AY + y >= FBitmap1.Height) continue;
 
                     Color c1 = FBitmap1.GetPixel(AX + x, AY + y);
@@ -166,10 +176,10 @@ namespace ImageFun
                     double gresqr2 = Math.Pow(c2.G - cOrig.G, 2);
                     double blusqr2 = Math.Pow(c2.B - cOrig.B, 2);
 
-                    // Calculo a distância euclidiana entre a cor da imagem 1 e da imagem original
+                    //Calculo a distância euclidiana entre a cor da imagem 1 e da imagem original
                     sumEuclideanDist1 += Math.Sqrt(redsqr1 + gresqr1 + blusqr1);
 
-                    // Calculo a distância euclidiana entre a cor da imagem 2 e da imagem original
+                    //Calculo a distância euclidiana entre a cor da imagem 2 e da imagem original
                     sumEuclideanDist2 += Math.Sqrt(redsqr2 + gresqr2 + blusqr2);
                 }
             }
@@ -183,18 +193,23 @@ namespace ImageFun
             // Se a imagem 1 é mais parecida com a original, eu copio a imagem 1 para a imagem 2
             if (sumEuclideanDist1 < sumEuclideanDist2)
             {
-                using (Graphics g = Graphics.FromImage(FBitmap2))
+                using (Graphics g = Graphics.FromImage(FBitmap2.Bitmap))
+                using (GraphicsPath p = new GraphicsPath())
                 {
-                    //TODO: Desenhar apenas no conjunto de pontos dentro da elipse
-                    g.DrawImage(FBitmap1, r, r, GraphicsUnit.Pixel);
+                    p.AddEllipse(r);
+                    g.SetClip(p);
+                    g.DrawImage(FBitmap1.Bitmap, r, r, GraphicsUnit.Pixel);
                 }
             }
             // Senão, copio a imagem 2 para a imagem 1
             else
             {
-                using (Graphics g = Graphics.FromImage(FBitmap1))
+                using (Graphics g = Graphics.FromImage(FBitmap1.Bitmap))
+                using (GraphicsPath p = new GraphicsPath())
                 {
-                    g.DrawImage(FBitmap2, r, r, GraphicsUnit.Pixel);
+                    p.AddEllipse(r);
+                    g.SetClip(p);
+                    g.DrawImage(FBitmap2.Bitmap, r, r, GraphicsUnit.Pixel);
                 }
             }
         }

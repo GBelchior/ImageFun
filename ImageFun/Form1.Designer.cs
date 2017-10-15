@@ -47,6 +47,7 @@
             this.txtFile = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.picOriginal)).BeginInit();
             this.tblMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCreated)).BeginInit();
@@ -93,6 +94,7 @@
             this.picCreated.Size = new System.Drawing.Size(385, 366);
             this.picCreated.TabIndex = 1;
             this.picCreated.TabStop = false;
+            this.picCreated.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.picCreated_MouseDoubleClick);
             // 
             // panel1
             // 
@@ -121,6 +123,7 @@
             // 
             // chkFaster
             // 
+            this.chkFaster.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkFaster.AutoSize = true;
             this.chkFaster.Location = new System.Drawing.Point(527, 10);
             this.chkFaster.Name = "chkFaster";
@@ -131,6 +134,7 @@
             // 
             // chkFast
             // 
+            this.chkFast.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkFast.AutoSize = true;
             this.chkFast.Location = new System.Drawing.Point(475, 10);
             this.chkFast.Name = "chkFast";
@@ -288,10 +292,16 @@
             // 
             // openFileDialog
             // 
-            this.openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png";
+            this.openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png|All Files|*.*";
+            // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.FileName = "created";
+            this.saveFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png|All Files|*.*";
             // 
             // Form1
             // 
+            this.AcceptButton = this.btnStart;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 441);
@@ -332,6 +342,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox chkFaster;
         private System.Windows.Forms.CheckBox chkFast;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }
 

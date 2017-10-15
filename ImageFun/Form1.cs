@@ -122,5 +122,15 @@ namespace ImageFun
         {
             Operating = !Operating;
         }
+
+        private void picCreated_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (Operating) return;
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                FImageWorker.NewBitmap.Save(saveFileDialog.FileName);
+            }
+        }
     }
 }
